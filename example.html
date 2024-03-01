@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="description" content="endless-transaction is a Scala library that provides a functional abstraction for distributed transactions based on cats-effect and the endless library.">
+<meta property="og:title" content="Endless4s">
+<meta property="og:description" content="endless-transaction is a Scala library that provides a functional abstraction for distributed transactions based on cats-effect and the endless library.">
+<meta property="og:image" content="https://endless4s.github.io/logo-open-graph.png">
+<meta name="generator" content="Paradox, paradox-material-theme=0.6.0, mkdocs-material=3.0.3">
+
+<meta name="lang:clipboard.copy" content="Copy to clipboard">
+<meta name="lang:clipboard.copied" content="Copied to clipboard">
+<meta name="lang:search.language" content="">
+<meta name="lang:search.pipeline.stopwords" content="true">
+<meta name="lang:search.pipeline.trimmer" content="true">
+<meta name="lang:search.result.none" content="No matching documents">
+<meta name="lang:search.result.one" content="1 matching document">
+<meta name="lang:search.result.other" content="# matching documents">
+<meta name="lang:search.tokenizer" content="[\s\-]+">
+
+
+<meta name="description" content="endless-transaction is a Scala library that provides a functional abstraction for distributed transactions based on cats-effect and the endless library.">
+<link rel="shortcut icon" href="favicon.png">
+<title>Example · </title>
+<link rel="stylesheet" href="assets/stylesheets/application.451f80e5.css">
+<link rel="stylesheet" href="assets/stylesheets/application-palette.22915126.css">
+<meta name="theme-color" content="#546e7a" />
+<link rel="stylesheet" href="lib/material__tabs/dist/mdc.tabs.min.css">
+<link rel="stylesheet" href="lib/prettify/prettify.css">
+<script src="assets/javascripts/modernizr.1aa3b519.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,700|Overpass+Mono">
+<style>
+body,input{font-family:"Overpass","Helvetica Neue",Helvetica,Arial,sans-serif}
+code,kbd,pre{font-family:"Overpass Mono","Courier New",Courier,monospace}
+</style>
+<link rel="stylesheet" href="assets/fonts/font-awesome.css">
+<link rel="stylesheet" href="assets/fonts/material-icons.css">
+<link rel="stylesheet" href="assets/stylesheets/paradox-material-theme.css">
+</head>
+<body
+data-md-color-primary="blue-grey"
+data-md-color-accent="red"
+>
+<input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+<input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+<label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+<header class="md-header" data-md-component="header">
+<nav class="md-header-nav md-grid">
+<div class="md-flex">
+<div class="md-flex__cell md-flex__cell--shrink">
+<a href="index.html" title="" class="md-header-nav__button md-logo">
+<img src="logo-symbol-only.svg" width="24" height="24">
+</a>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch">
+<div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+<span class="md-header-nav__topic">
+</span>
+<span class="md-header-nav__topic">
+Example
+</span>
+</div>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+<label class="md-icon md-search__icon" for="__search"></label>
+<button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">&#xE5CD;</button>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix>
+<div class="md-search-result" data-md-component="result">
+<div class="md-search-result__meta">
+Type to start searching
+</div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<div class="md-header-nav__source">
+<a href="https://github.com/endless4s/endless-transaction"
+title="Go to repository"
+class="md-source"
+data-md-source="github">
+<div class="md-source__icon">
+<i class="fa fa-github"></i>
+</div>
+<div class="md-source__repository">
+endless4s/endless-transaction
+</div>
+</a>
+
+</div>
+</div>
+</div>
+</nav>
+</header>
+
+<div class="md-container">
+<main class="md-main">
+<div class="md-main__inner md-grid" data-md-component="container">
+<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--primary" data-md-level="0" style="visibility: hidden">
+<label class="md-nav__title md-nav__title--site" for="drawer">
+<a href="index.html" title="" class="md-nav__button md-logo">
+<span class="md-nav__button md-logo">
+<img src="logo-symbol-only.svg" width="24" height="24">
+</a>
+<a href="index.html" title="">
+</a>
+</label>
+<div class="md-nav__source">
+<a href="https://github.com/endless4s/endless-transaction"
+title="Go to repository"
+class="md-source"
+data-md-source="github">
+<div class="md-source__icon">
+<i class="fa fa-github"></i>
+</div>
+<div class="md-source__repository">
+endless4s/endless-transaction
+</div>
+</a>
+
+</div>
+<ul>
+  <li><a href="getting-started.html" class="page">Getting Started</a></li>
+  <li><a href="nutshell.html" class="page">In a nutshell</a></li>
+  <li><a href="2pc.html" class="page">Two-phase commit protocol</a></li>
+  <li><a href="abstractions.html" class="page">Abstractions</a>
+  <ul>
+    <li><a href="transactor.html" class="page">Transactor</a></li>
+    <li><a href="coordinator.html" class="page">Coordinator</a></li>
+    <li><a href="transaction.html" class="page">Transaction</a></li>
+    <li><a href="branch.html" class="page">Branch</a></li>
+  </ul></li>
+  <li><a href="example.html" class="active page">Example</a></li>
+  <li><a href="reference.html" class="page">Reference</a></li>
+</ul>
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul>
+  <li><a href="example.html#example" class="header">Example</a>
+  <ul>
+    <li><a href="example.html#api" class="header">API</a></li>
+    <li><a href="example.html#algebras" class="header">Algebras</a></li>
+    <li><a href="example.html#transfers" class="header">Transfers</a></li>
+  </ul></li>
+</ul>
+</nav>
+
+</nav>
+<ul style="display: none">
+<li class="md-nav__item md-version" id="project.version">
+<label class="md-nav__link" for="__version">
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-99e419f0*
+</label>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul>
+  <li><a href="example.html#example" class="header">Example</a>
+  <ul>
+    <li><a href="example.html#api" class="header">API</a></li>
+    <li><a href="example.html#algebras" class="header">Algebras</a></li>
+    <li><a href="example.html#transfers" class="header">Transfers</a></li>
+  </ul></li>
+</ul>
+</nav>
+
+</div>
+</div>
+</div>
+<div class="md-content">
+<article class="md-content__inner md-typeset">
+<div class="md-content__searchable">
+<h1><a href="#example" name="example" class="anchor"><span class="anchor-link"></span></a>Example</h1>
+<p>The example app is a dummy API for managing bank accounts and transferring amounts between accounts. Accounts are implemented with sharded entities, and transfers with transactions. </p>
+<p>The example app can be found in the <code>example</code> module and can be run directly with <code>sbt run</code>. </p><div class="callout note "><div class="callout-title">Stress-test</div>
+<p>The module also contains a multi-jvm test that demonstrates the resilience of the system, by transferring amounts between 1000 accounts while restarting nodes. </p></div>
+<h2><a href="#api" name="api" class="anchor"><span class="anchor-link"></span></a>API</h2>
+<p>The API has a simple CRUD for accounts and a dedicated endpoint to perform transfers between two accounts.</p>
+<pre class="prettyprint"><code class="language-scala">HttpRoutes.of[IO] {
+    case GET -&gt; Root / &quot;account&quot; / id / &quot;balance&quot; =&gt; server.balanceFor(AccountID(id))
+    case POST -&gt; Root / &quot;account&quot; / id            =&gt; server.open(AccountID(id))
+    case POST -&gt; Root / &quot;account&quot; / id / &quot;deposit&quot; / IntVar(amount) =&gt; server.deposit(AccountID(id), amount)
+    case POST -&gt; Root / &quot;account&quot; / id / &quot;withdraw&quot; / IntVar(amount) =&gt; server.withdraw(AccountID(id), amount)
+    case POST -&gt; Root / &quot;account&quot; / origin / &quot;transfer&quot; / &quot;to&quot; / destination / IntVar(amount) =&gt; server.transfer(AccountID(origin), AccountID(destination), PosAmount(amount))
+  }
+  .orNotFound
+</code></pre>
+<p>The HTTP server makes uses of the <code>Accounts</code> and <code>Account</code> algebras to satisfy the requests.</p>
+<h2><a href="#algebras" name="algebras" class="anchor"><span class="anchor-link"></span></a>Algebras</h2>
+<h3><a href="#accounts" name="accounts" class="anchor"><span class="anchor-link"></span></a><code>Accounts</code></h3>
+<p>This trait represents the repository, i.e. the ability to retrieve a handle on a specific account and orchestrate transfers between accounts. </p>
+<pre class="prettyprint"><code class="language-scala">trait Accounts[F[_]] 
+  def accountFor(name: AccountID): Account[F]
+  def transfer(from: AccountID, to: AccountID, amount: PosAmount): F[TransferFailure \/ Unit]
+</code></pre>
+<h3><a href="#account" name="account" class="anchor"><span class="anchor-link"></span></a><code>Account</code></h3>
+<p>This trait represents the account entity, i.e. the ability to query and perform operations on a specific account. </p>
+<pre class="prettyprint"><code class="language-scala">trait Account[F[_]] 
+  def open: F[AlreadyExists.type \/ Unit]
+  def balance: F[Unknown.type \/ NonNegAmount]
+  def deposit(amount: PosAmount): F[Unknown.type \/ PosAmount]
+  def withdraw(amount: PosAmount): F[WithdrawFailure \/ NonNegAmount]
+
+  def prepareOutgoingTransfer(id: TransferID, transfer: Transfer): F[WithdrawFailure \/ Unit]
+  def prepareIncomingTransfer(id: TransferID, transfer: Transfer): F[IncomingTransferFailure \/ Unit]
+  def commitTransfer(id: TransferID): F[TransferFailure \/ Unit]
+  def abortTransfer(id: TransferID): F[TransferFailure \/ Unit]
+</code></pre>
+<p>The latter four methods are of particular interest as they are used by the transactional branch logic to carry out the various phases of the transfer. </p>
+<h2><a href="#transfers" name="transfers" class="anchor"><span class="anchor-link"></span></a>Transfers</h2>
+<p>Transfers are implemented using an <code>endless-transaction</code> transaction coordinator. </p>
+<h3><a href="#coordinator" name="coordinator" class="anchor"><span class="anchor-link"></span></a>Coordinator</h3>
+<p>A coordinator is created with <code>TransferID</code> as the transaction identifier type, <code>AccountID</code> as the branch identifier, <code>Transfer</code> as the query payload (the amount, origin, and destination), and <code>TransferFailure</code> as the error coproduct.</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless-transaction/tree/master/example/src/main/scala/endless/transaction/example/logic/ShardedAccounts.scala#L61-L68" target="_blank" title="Go to snippet source">source</a><code class="language-scala">transactor.coordinator[TransferID, AccountID, Transfer, TransferFailure](
+  &quot;transfer&quot;,
+  { accountID =&gt;
+    val account = sharding.entityFor(accountID)
+    new TransferBranch(accountID, account)
+  },
+  Some(transferParameters.timeout)
+)</code></pre>
+<p>The coordinator is used in the implementation of the <code>transfer</code> method in <code>ShardedAccounts</code>, i.e. the implementation of <code>Accounts</code>. </p>
+<h3><a href="#transaction" name="transaction" class="anchor"><span class="anchor-link"></span></a>Transaction</h3>
+<p>The snippet below shows the logic: the code creates a transfer with two branches, one for the origin account, and the other for the destination account.</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless-transaction/tree/master/example/src/main/scala/endless/transaction/example/logic/ShardedAccounts.scala#L29-L49" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def transfer(from: AccountID, to: AccountID, amount: PosAmount): F[TransferFailure \/ Unit] =
+  coordinator
+    .create(TransferID.random, Transfer(from, to, amount), from, to)
+    .use(_.pollForFinalStatus())
+    .flatMap {
+      case Status.Committed =&gt; ().asRight[TransferFailure].pure
+      case Status.Aborted(reason) =&gt;
+        reason match {
+          case AbortReason.Timeout =&gt;
+            EitherT.leftT(TransferFailure.Timeout: TransferFailure).value
+          case AbortReason.Branches(reasons)    =&gt; EitherT.leftT(reasons.head).value
+          case AbortReason.Client(Some(reason)) =&gt; EitherT.leftT(reason).value
+          case AbortReason.Client(None) =&gt;
+            new Exception(&quot;Transaction aborted by client without justification&quot;)
+              .raiseError[F, TransferFailure \/ Unit]
+        }
+      case Status.Failed(errors) =&gt;
+        Logger[F].error(show&quot;Transaction failed: $errors&quot;) *&gt; new Exception(
+          &quot;Transaction failed due to branch error&quot;
+        ).raiseError[F, TransferFailure \/ Unit]
+    }</code></pre>
+<p>The transaction entity is sharded, so it can be running on a separate node. We therefore need to regularly check for completion so that we can respond to the API call (it&rsquo;s synchronous here for the sake of simplicity). </p>
+<p>To implement this polling operation, we use the <code>pollForFinalStatus()</code> built-in extension method (defined for <code>Transaction</code>): this method retrieves the status of the transaction at configurable intervals and semantically sleeps in between.</p>
+<h3><a href="#branch" name="branch" class="anchor"><span class="anchor-link"></span></a>Branch</h3>
+<p>An account&rsquo;s involvement in a transfer is described by <code>TransferBranch</code>, as exemplified below with the implementation of the <code>prepare</code> method: </p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless-transaction/tree/master/example/src/main/scala/endless/transaction/example/logic/TransferBranch.scala#L19-L59" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class TransferBranch[F[_]: Logger](accountID: AccountID, account: Account[F])(implicit
+    temporal: Temporal[F]
+) extends Branch[F, TransferID, Transfer, TransferFailure] {
+  import temporal.*
+
+  def prepare(transferID: TransferID, transfer: Transfer): F[Branch.Vote[TransferFailure]] = {
+    if (accountID === transfer.origin)
+      Logger[F].debug(
+        show&quot;Preparing outgoing transfer $transferID: $transfer for account $accountID&quot;
+      ) &gt;&gt;
+        account
+          .prepareOutgoingTransfer(transferID, transfer)
+          .map {
+            case Left(Account.Unknown) =&gt;
+              Branch.Vote.Abort(TransferFailure.AccountNotFound(accountID))
+            case Left(InsufficientFunds(missing)) =&gt;
+              Branch.Vote.Abort(TransferFailure.InsufficientFunds(missing))
+            case Left(Account.PendingOutgoingTransfer) =&gt;
+              Branch.Vote.Abort(TransferFailure.OtherPendingTransfer)
+            case Right(_) =&gt; Branch.Vote.Commit: Branch.Vote[TransferFailure]
+          }
+          .retryWithBackoff(
+            Logger[F]
+              .warn(_)(show&quot;Error preparing outgoing transfer $transferID, retrying in a bit&quot;)
+          )
+    else
+      Logger[F].debug(show&quot;Preparing incoming $transferID: $transfer for account $accountID&quot;) &gt;&gt;
+        account
+          .prepareIncomingTransfer(transferID, transfer)
+          .map {
+            case Left(Account.Unknown) =&gt;
+              Branch.Vote.Abort(TransferFailure.AccountNotFound(accountID))
+            case Left(Account.PendingIncomingTransfer) =&gt;
+              Branch.Vote.Abort(TransferFailure.OtherPendingTransfer)
+            case Right(_) =&gt; Branch.Vote.Commit: Branch.Vote[TransferFailure]
+          }
+          .retryWithBackoff(
+            Logger[F]
+              .warn(_)(show&quot;Error preparing incoming transfer $transferID, retrying in a bit&quot;)
+          )
+  }</code></pre>
+</div>
+<div>
+<a href="https://github.com/endless4s/endless-transaction/tree/master/documentation/src/main/paradox/example.md" title="Edit this page" class="md-source-file md-edit">
+Edit this page
+</a>
+</div>
+<div class="print-only">
+<span class="md-source-file md-version">
+0.0.0+1-99e419f0*
+</span>
+</div>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-nav">
+<nav class="md-footer-nav__inner md-grid">
+<a href="branch.html" title="Branch" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Previous
+</span>
+Branch
+</span>
+</div>
+</a>
+<a href="reference.html" title="Reference" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Next
+</span>
+Reference
+</span>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+</div>
+</a>
+</nav>
+</div>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-footer-copyright">
+Powered by
+<a href="https://github.com/lightbend/paradox">Paradox</a>
+and
+<a href="https://jonas.github.io/paradox-material-theme/">Paradox Material Theme</a>
+
+</div>
+<div class="md-footer-social">
+<a href="https://github.com/endless4s/endless-transaction" class="md-footer-social__link fa fa-github"></a>
+</div>
+
+</div>
+</div>
+</footer>
+
+</div>
+<script src="assets/javascripts/application.583bbe55.js"></script>
+<script src="assets/javascripts/paradox-material-theme.js"></script>
+<script>app.initialize({version:"0.17",url:{base:"."}})</script>
+<script type="text/javascript" src="lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(event) {
+window.prettyPrint && prettyPrint();
+});
+</script>
+<script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","G-KKHFXG4VB4"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})});if(document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
+
+</body>
+</html>

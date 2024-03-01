@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="description" content="endless-transaction is a Scala library that provides a functional abstraction for distributed transactions based on cats-effect and the endless library.">
+<meta property="og:title" content="Endless4s">
+<meta property="og:description" content="endless-transaction is a Scala library that provides a functional abstraction for distributed transactions based on cats-effect and the endless library.">
+<meta property="og:image" content="https://endless4s.github.io/logo-open-graph.png">
+<meta name="generator" content="Paradox, paradox-material-theme=0.6.0, mkdocs-material=3.0.3">
+
+<meta name="lang:clipboard.copy" content="Copy to clipboard">
+<meta name="lang:clipboard.copied" content="Copied to clipboard">
+<meta name="lang:search.language" content="">
+<meta name="lang:search.pipeline.stopwords" content="true">
+<meta name="lang:search.pipeline.trimmer" content="true">
+<meta name="lang:search.result.none" content="No matching documents">
+<meta name="lang:search.result.one" content="1 matching document">
+<meta name="lang:search.result.other" content="# matching documents">
+<meta name="lang:search.tokenizer" content="[\s\-]+">
+
+
+<meta name="description" content="endless-transaction is a Scala library that provides a functional abstraction for distributed transactions based on cats-effect and the endless library.">
+<link rel="shortcut icon" href="favicon.png">
+<title>Two-phase commit protocol · </title>
+<link rel="stylesheet" href="assets/stylesheets/application.451f80e5.css">
+<link rel="stylesheet" href="assets/stylesheets/application-palette.22915126.css">
+<meta name="theme-color" content="#546e7a" />
+<link rel="stylesheet" href="lib/material__tabs/dist/mdc.tabs.min.css">
+<link rel="stylesheet" href="lib/prettify/prettify.css">
+<script src="assets/javascripts/modernizr.1aa3b519.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,700|Overpass+Mono">
+<style>
+body,input{font-family:"Overpass","Helvetica Neue",Helvetica,Arial,sans-serif}
+code,kbd,pre{font-family:"Overpass Mono","Courier New",Courier,monospace}
+</style>
+<link rel="stylesheet" href="assets/fonts/font-awesome.css">
+<link rel="stylesheet" href="assets/fonts/material-icons.css">
+<link rel="stylesheet" href="assets/stylesheets/paradox-material-theme.css">
+</head>
+<body
+data-md-color-primary="blue-grey"
+data-md-color-accent="red"
+>
+<input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+<input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+<label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+<header class="md-header" data-md-component="header">
+<nav class="md-header-nav md-grid">
+<div class="md-flex">
+<div class="md-flex__cell md-flex__cell--shrink">
+<a href="index.html" title="" class="md-header-nav__button md-logo">
+<img src="logo-symbol-only.svg" width="24" height="24">
+</a>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch">
+<div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+<span class="md-header-nav__topic">
+</span>
+<span class="md-header-nav__topic">
+Two-phase commit protocol
+</span>
+</div>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+<label class="md-icon md-search__icon" for="__search"></label>
+<button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">&#xE5CD;</button>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix>
+<div class="md-search-result" data-md-component="result">
+<div class="md-search-result__meta">
+Type to start searching
+</div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<div class="md-header-nav__source">
+<a href="https://github.com/endless4s/endless-transaction"
+title="Go to repository"
+class="md-source"
+data-md-source="github">
+<div class="md-source__icon">
+<i class="fa fa-github"></i>
+</div>
+<div class="md-source__repository">
+endless4s/endless-transaction
+</div>
+</a>
+
+</div>
+</div>
+</div>
+</nav>
+</header>
+
+<div class="md-container">
+<main class="md-main">
+<div class="md-main__inner md-grid" data-md-component="container">
+<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--primary" data-md-level="0" style="visibility: hidden">
+<label class="md-nav__title md-nav__title--site" for="drawer">
+<a href="index.html" title="" class="md-nav__button md-logo">
+<span class="md-nav__button md-logo">
+<img src="logo-symbol-only.svg" width="24" height="24">
+</a>
+<a href="index.html" title="">
+</a>
+</label>
+<div class="md-nav__source">
+<a href="https://github.com/endless4s/endless-transaction"
+title="Go to repository"
+class="md-source"
+data-md-source="github">
+<div class="md-source__icon">
+<i class="fa fa-github"></i>
+</div>
+<div class="md-source__repository">
+endless4s/endless-transaction
+</div>
+</a>
+
+</div>
+<ul>
+  <li><a href="getting-started.html" class="page">Getting Started</a></li>
+  <li><a href="nutshell.html" class="page">In a nutshell</a></li>
+  <li><a href="2pc.html" class="active page">Two-phase commit protocol</a></li>
+  <li><a href="abstractions.html" class="page">Abstractions</a>
+  <ul>
+    <li><a href="transactor.html" class="page">Transactor</a></li>
+    <li><a href="coordinator.html" class="page">Coordinator</a></li>
+    <li><a href="transaction.html" class="page">Transaction</a></li>
+    <li><a href="branch.html" class="page">Branch</a></li>
+  </ul></li>
+  <li><a href="example.html" class="page">Example</a></li>
+  <li><a href="reference.html" class="page">Reference</a></li>
+</ul>
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul>
+  <li><a href="2pc.html#two-phase-commit-protocol" class="header">Two-phase commit protocol</a>
+  <ul>
+    <li><a href="2pc.html#prepare" class="header">Prepare</a></li>
+    <li><a href="2pc.html#commit" class="header">Commit</a></li>
+    <li><a href="2pc.html#abort" class="header">Abort</a></li>
+    <li><a href="2pc.html#state-diagram" class="header">State diagram</a></li>
+  </ul></li>
+</ul>
+</nav>
+
+</nav>
+<ul style="display: none">
+<li class="md-nav__item md-version" id="project.version">
+<label class="md-nav__link" for="__version">
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-99e419f0*
+</label>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul>
+  <li><a href="2pc.html#two-phase-commit-protocol" class="header">Two-phase commit protocol</a>
+  <ul>
+    <li><a href="2pc.html#prepare" class="header">Prepare</a></li>
+    <li><a href="2pc.html#commit" class="header">Commit</a></li>
+    <li><a href="2pc.html#abort" class="header">Abort</a></li>
+    <li><a href="2pc.html#state-diagram" class="header">State diagram</a></li>
+  </ul></li>
+</ul>
+</nav>
+
+</div>
+</div>
+</div>
+<div class="md-content">
+<article class="md-content__inner md-typeset">
+<div class="md-content__searchable">
+<h1><a href="#two-phase-commit-protocol" name="two-phase-commit-protocol" class="anchor"><span class="anchor-link"></span></a>Two-phase commit protocol</h1>
+<p>The three tenants of the 2PC protocol are <em>prepare</em>, <em>commit</em>, and <em>abort</em>: in <code>endless-transaction</code>, participating branches define effectful expressions for the three operations.</p>
+<h2><a href="#prepare" name="prepare" class="anchor"><span class="anchor-link"></span></a>Prepare</h2>
+<p>Validate a <em>query</em> value, possibly effect the local branch context, and return a <em>vote</em> value. The vote is a signal for the coordinator to either <em>commit</em> or <em>abort</em> the transaction. This expression can involve any kind of asynchronous process, and there is no limit to the time it takes for the vote to be delivered to the coordinator (unless a timeout is configured). Below are some examples of prepare operations in an imaginary (and somewhat convoluted) touristic journey booking process:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Example: orchestration of the booking process for a journey </th>
+      <th>Data store </th>
+      <th>Transaction branch operation </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Create cancelable hotel &amp; flight reservations </td>
+      <td>External API </td>
+      <td>Make a reversible synchronous HTTP POST/PUT request </td>
+    </tr>
+    <tr>
+      <td>Request the billing back-end for credit card guarantee charge and await confirmation </td>
+      <td>Internal service </td>
+      <td>Send a message or call an endpoint and wait for an event to occur </td>
+    </tr>
+    <tr>
+      <td>Add details to the customer row in the database </td>
+      <td>Database </td>
+      <td>Acquire an exclusive lock on a database row or use built-in XA support </td>
+    </tr>
+    <tr>
+      <td>Grab a semaphore to update the &ldquo;recent bookings&rdquo; cache </td>
+      <td>In-memory resource </td>
+      <td>Lock an in-memory resource </td>
+    </tr>
+    <tr>
+      <td>Schedule traveller reminder notifications </td>
+      <td>Actor cluster </td>
+      <td>Send a command to an actor </td>
+    </tr>
+    <tr>
+      <td>Add an entry in a bookings log </td>
+      <td>File </td>
+      <td>Persist a rollback-ready change in a file </td>
+    </tr>
+  </tbody>
+</table>
+<h2><a href="#commit" name="commit" class="anchor"><span class="anchor-link"></span></a>Commit</h2>
+<p>This is triggered by the coordinator after all branches have voted for commit. The branch is expected to effect the local context to make at least part of the change durable and return a <em>confirmation</em> value.</p>
+<p>Like for <em>prepare</em> above, this expression can involve any kind of asynchronous process, and the toolkit does not impose a limit on the time it takes for the confirmation to be delivered to the coordinator.</p>
+<p>Some examples of commit operations in the same imaginary touristic journey booking process:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Example: orchestration of the booking process for a journey </th>
+      <th>Data store </th>
+      <th>Transaction branch operation </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Do nothing: reservations were already made </td>
+      <td>External API </td>
+      <td>Send a message or call and endpoint of another service </td>
+    </tr>
+    <tr>
+      <td>Do nothing: the guarantee charge was already made </td>
+      <td>Internal service </td>
+      <td>Send a message to another service </td>
+    </tr>
+    <tr>
+      <td>Update customer details in the internal database </td>
+      <td>Database </td>
+      <td>Perform the row update and unlock </td>
+    </tr>
+    <tr>
+      <td>Update the &ldquo;recent bookings&rdquo; cache and release the semaphore </td>
+      <td>In-memory resource </td>
+      <td>Edit and unlock an in-memory resource </td>
+    </tr>
+    <tr>
+      <td>Do nothing: the reminder notifications were already scheduled </td>
+      <td>Actor cluster </td>
+      <td>Send a command to an actor </td>
+    </tr>
+    <tr>
+      <td>Do nothing: the bookings log was already updated </td>
+      <td>File </td>
+      <td>Persist a change in a file </td>
+    </tr>
+  </tbody>
+</table><div class="callout note "><div class="callout-title">Consistency</div>
+<p>It&rsquo;s up to the implementer to decide the level of consistency in the execution of the commit. Transaction failure is also a valid state and can be signaled by raising an exception in the target effect. This will lead to some degree of inconsistency in the overall system state, but that can be an acceptable compromise in some use cases.</p>
+<p>For instance, in our imaginary example the &ldquo;in-memory cache&rdquo; could be locked only for a short time to preserve throughput. Because it&rsquo;s not essential to the journey process, updating it could be skipped in case of delays. On the other hand, if the &ldquo;internal database&rdquo; update would still fail despite the lock, this could be signaled by raising an exception. This would conclude the transaction in a failed state, which could be surfaced in the UI to allow for manual remediation.</p></div>
+<h2><a href="#abort" name="abort" class="anchor"><span class="anchor-link"></span></a>Abort</h2>
+<p>This is triggered by the coordinator after at least one branch has voted for abort. The branch is expected to effect the local context to roll back the changes and return a <em>confirmation</em> value. The same flexibility as for <em>prepare</em> and <em>commit</em> applies here.</p>
+<p>Some examples of abort operations in the same imaginary process:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Example: orchestration of the booking process for a journey </th>
+      <th>Data store </th>
+      <th>Transaction branch operation </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cancel the hotel &amp; flight reservations </td>
+      <td>External API </td>
+      <td>Send a message or call and endpoint of another service </td>
+    </tr>
+    <tr>
+      <td>Cancel the credit guarantee charge </td>
+      <td>Internal service </td>
+      <td>Send a message to another service </td>
+    </tr>
+    <tr>
+      <td>Do nothing: the customer details do not need to be updated </td>
+      <td>Database </td>
+      <td>Unlock the row and do nothing </td>
+    </tr>
+    <tr>
+      <td>Release the semaphore and do nothing: the cache does not need to be updated </td>
+      <td>In-memory resource </td>
+      <td>Unlock an in-memory resource </td>
+    </tr>
+    <tr>
+      <td>Cancel the reminder notifications </td>
+      <td>Actor cluster </td>
+      <td>Send a command to an actor </td>
+    </tr>
+    <tr>
+      <td>Roll back the booking log entry </td>
+      <td>File </td>
+      <td>Roll back the change in a file </td>
+    </tr>
+  </tbody>
+</table>
+<p>The same flexibility applies here as for the commit operation: it&rsquo;s up to the implementer to decide the level of consistency in the execution of the abort. In this dummy example, let&rsquo;s suppose traveler reminders have already been sent, a compensation action could be to schedule a new notification inviting the customer to ignore previous messages. On the other hand, failing to cancel the hotel and flight reservations would be a more serious issue and should be surfaced as a failed transaction, to elicit manual remediation.</p>
+<h2><a href="#state-diagram" name="state-diagram" class="anchor"><span class="anchor-link"></span></a>State diagram</h2>
+<p>Protocol state throughout the aforementioned phases is tracked by an event-sourced entity, with events representing transitions of the state. The transaction state machine diagram is depicted below. As usual, side-effects are invoked after successful event persistence, and repeated in case of recovery (at least once delivery characteristics).</p>
+<img src="diagrams/TransactionEntity.png"/><div class="callout warning "><div class="callout-title">Consider the use case carefully</div>
+<p>Certain use cases call for different techniques: for instance, the classical challenge of publishing events to a broker atomically with a change in a database is best solved by the simpler transaction outbox pattern or event sourcing.</p></div><div class="callout note "><div class="callout-title">2PC is often used in distributed technologies</div>
+<ul>
+  <li>Distributed databases such as CockroachDB, MongoDB, and others implement 2PC to atomically store values across partitions.</li>
+  <li>Apache Kafka allows producing messages across multiple partitions atomically with an implementation similar to 2PC.</li>
+</ul></div>
+</div>
+<div>
+<a href="https://github.com/endless4s/endless-transaction/tree/master/documentation/src/main/paradox/2pc.md" title="Edit this page" class="md-source-file md-edit">
+Edit this page
+</a>
+</div>
+<div class="print-only">
+<span class="md-source-file md-version">
+0.0.0+1-99e419f0*
+</span>
+</div>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-nav">
+<nav class="md-footer-nav__inner md-grid">
+<a href="nutshell.html" title="In a nutshell" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Previous
+</span>
+In a nutshell
+</span>
+</div>
+</a>
+<a href="abstractions.html" title="Abstractions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Next
+</span>
+Abstractions
+</span>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+</div>
+</a>
+</nav>
+</div>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-footer-copyright">
+Powered by
+<a href="https://github.com/lightbend/paradox">Paradox</a>
+and
+<a href="https://jonas.github.io/paradox-material-theme/">Paradox Material Theme</a>
+
+</div>
+<div class="md-footer-social">
+<a href="https://github.com/endless4s/endless-transaction" class="md-footer-social__link fa fa-github"></a>
+</div>
+
+</div>
+</div>
+</footer>
+
+</div>
+<script src="assets/javascripts/application.583bbe55.js"></script>
+<script src="assets/javascripts/paradox-material-theme.js"></script>
+<script>app.initialize({version:"0.17",url:{base:"."}})</script>
+<script type="text/javascript" src="lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(event) {
+window.prettyPrint && prettyPrint();
+});
+</script>
+<script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","G-KKHFXG4VB4"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})});if(document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
+
+</body>
+</html>
