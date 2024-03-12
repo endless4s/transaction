@@ -8,7 +8,7 @@
 <meta property="og:title" content="endless4s-transaction">
 <meta property="og:description" content="endless-transaction is a Scala library that provides a functional abstraction for distributed transactions based on cats-effect and the endless library.">
 <meta property="og:image" content="https://endless4s.github.io/transaction/logo-open-graph.png">
-<meta name="generator" content="Paradox, paradox-material-theme=0.6.0, mkdocs-material=3.0.3">
+<meta name="generator" content="Paradox, paradox-material-theme=0.7.0, mkdocs-material=3.0.3">
 
 <meta name="lang:clipboard.copy" content="Copy to clipboard">
 <meta name="lang:clipboard.copied" content="Copied to clipboard">
@@ -170,7 +170,7 @@ endless4s/endless-transaction
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.0.3
+<i class="md-icon" title="Version">label_outline</i> 0.1.0
 </label>
 </li>
 </ul>
@@ -256,41 +256,10 @@ endless4s/endless-transaction
       <th>Transaction branch operation </th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
-      <td>Do nothing: reservations were already made </td>
-      <td>External API </td>
-      <td>Send a message or call and endpoint of another service </td>
-    </tr>
-    <tr>
-      <td>Do nothing: the guarantee charge was already made </td>
-      <td>Internal service </td>
-      <td>Send a message to another service </td>
-    </tr>
-    <tr>
-      <td>Update customer details in the internal database </td>
-      <td>Database </td>
-      <td>Perform the row update and unlock </td>
-    </tr>
-    <tr>
-      <td>Update the &ldquo;recent bookings&rdquo; cache and release the semaphore </td>
-      <td>In-memory resource </td>
-      <td>Edit and unlock an in-memory resource </td>
-    </tr>
-    <tr>
-      <td>Do nothing: the reminder notifications were already scheduled </td>
-      <td>Actor cluster </td>
-      <td>Send a command to an actor </td>
-    </tr>
-    <tr>
-      <td>Do nothing: the bookings log was already updated </td>
-      <td>File </td>
-      <td>Persist a change in a file </td>
-    </tr>
-  </tbody>
-</table><div class="callout note "><div class="callout-title">Consistency</div>
-<p>It&rsquo;s up to the implementer to decide the level of consistency in the execution of the commit. Transaction failure is also a valid state and can be signaled by raising an exception in the target effect. This will lead to some degree of inconsistency in the overall system state, but that can be an acceptable compromise in some use cases.</p>
-<p>For instance, in our imaginary example the &ldquo;in-memory cache&rdquo; could be locked only for a short time to preserve throughput. Because it&rsquo;s not essential to the journey process, updating it could be skipped in case of delays. On the other hand, if the &ldquo;internal database&rdquo; update would still fail despite the lock, this could be signaled by raising an exception. This would conclude the transaction in a failed state, which could be surfaced in the UI to allow for manual remediation.</p></div>
+</table>
+<p>| Do nothing: reservations were already made | External API | - | | Do nothing: the guarantee charge was already made | Internal service | - | | Update customer details in the internal database | Database | Perform the row update and unlock | | Update the &ldquo;recent bookings&rdquo; cache and release the semaphore | In-memory resource | Edit and unlock an in-memory resource | | Do nothing: the reminder notifications were already scheduled | Actor cluster | - | | Do nothing: the bookings log was already updated | File | - |</p><div class="callout note "><div class="callout-title">Commit consistency</div>
+<p>It&rsquo;s up to the implementer to decide the level of consistency in the execution of the commit. Transaction failure is also valid and can be signaled by raising an exception in the target effect. Failure will lead to inconsistency in the overall system state, which can be an acceptable compromise in some use cases.</p>
+<p>For instance, in our imaginary example, the &ldquo;in-memory cache&rdquo; could be locked only briefly to preserve throughput. Because it&rsquo;s optional to the journey process, updating it could be skipped in case of delays. On the other hand, if the &ldquo;internal database&rdquo; update still fails despite the lock, the commit expression could signal this by raising an exception. The exception would conclude the transaction in a failed state, allowing surfacing in the UI for manual remediation.</p></div>
 <h2><a href="#abort" name="abort" class="anchor"><span class="anchor-link"></span></a>Abort</h2>
 <p>This is triggered by the coordinator after at least one branch has voted for abort. The branch is expected to effect the local context to roll back the changes and return a <em>confirmation</em> value. The same flexibility as for <em>prepare</em> and <em>commit</em> applies here.</p>
 <p>Some examples of abort operations in the same imaginary process:</p>
@@ -334,10 +303,10 @@ endless4s/endless-transaction
       <td>Roll back the change in a file </td>
     </tr>
   </tbody>
-</table>
-<p>The same flexibility applies here as for the commit operation: it&rsquo;s up to the implementer to decide the level of consistency in the execution of the abort. In this dummy example, let&rsquo;s suppose traveler reminders have already been sent, a compensation action could be to schedule a new notification inviting the customer to ignore previous messages. On the other hand, failing to cancel the hotel and flight reservations would be a more serious issue and should be surfaced as a failed transaction, to elicit manual remediation.</p>
+</table><div class="callout note "><div class="callout-title">Abort consistency</div>
+<p>The same flexibility applies here as for the commit operation: it&rsquo;s up to the implementer to decide the level of consistency in the execution of the abort. In this dummy example, let&rsquo;s suppose traveler reminders have already been sent: a compensation action could be to schedule a new notification inviting the customer to ignore previous messages. On the other hand, failing to cancel the hotel and flight reservations would be a more serious issue and should be considered a failed transaction to elicit manual remediation.</p></div>
 <h2><a href="#state-diagram" name="state-diagram" class="anchor"><span class="anchor-link"></span></a>State diagram</h2>
-<p>Protocol state throughout the aforementioned phases is tracked by an event-sourced entity, with events representing transitions of the state. The transaction state machine diagram is depicted below. As usual, side-effects are invoked after successful event persistence, and repeated in case of recovery (at least once delivery characteristics).</p>
+<p>Protocol state throughout the phases mentioned above is tracked by an event-sourced entity, with events representing state transitions. The transaction state machine diagram is depicted below. As usual, side-effects are invoked after successful event persistence and repeated in case of recovery (at least once delivery characteristics).</p>
 <img src="diagrams/TransactionEntity.png"/><div class="callout warning "><div class="callout-title">Consider the use case carefully</div>
 <p>Certain use cases call for different techniques: for instance, the classical challenge of publishing events to a broker atomically with a change in a database is best solved by the simpler transaction outbox pattern or event sourcing.</p></div><div class="callout note "><div class="callout-title">2PC is often used in distributed technologies</div>
 <ul>
@@ -346,13 +315,13 @@ endless4s/endless-transaction
 </ul></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless-transaction/tree/v0.0.3/documentation/src/main/paradox/2pc.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless-transaction/tree/v0.1.0/documentation/src/main/paradox/2pc.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.0.3
+0.1.0
 </span>
 </div>
 </article>
@@ -396,7 +365,7 @@ Abstractions
 Powered by
 <a href="https://github.com/lightbend/paradox">Paradox</a>
 and
-<a href="https://jonas.github.io/paradox-material-theme/">Paradox Material Theme</a>
+<a href="https://sbt.github.io/sbt-paradox-material-theme/">Paradox Material Theme</a>
 
 </div>
 <div class="md-footer-social">
