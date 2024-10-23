@@ -170,7 +170,7 @@ endless4s/endless-transaction
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.2.0
+<i class="md-icon" title="Version">label_outline</i> 0.3.0
 </label>
 </li>
 </ul>
@@ -256,8 +256,39 @@ endless4s/endless-transaction
       <th>Transaction branch operation </th>
     </tr>
   </thead>
-</table>
-<p>| Do nothing: reservations were already made | External API | - | | Do nothing: the guarantee charge was already made | Internal service | - | | Update customer details in the internal database | Database | Perform the row update and unlock | | Update the &ldquo;recent bookings&rdquo; cache and release the semaphore | In-memory resource | Edit and unlock an in-memory resource | | Do nothing: the reminder notifications were already scheduled | Actor cluster | - | | Do nothing: the bookings log was already updated | File | - |</p><div class="callout note "><div class="callout-title">Commit consistency</div>
+  <tbody>
+    <tr>
+      <td>Do nothing: reservations were already made </td>
+      <td>External API </td>
+      <td>nop </td>
+    </tr>
+    <tr>
+      <td>Do nothing: the guarantee charge was already made </td>
+      <td>Internal service </td>
+      <td>nop </td>
+    </tr>
+    <tr>
+      <td>Update customer details in the internal database </td>
+      <td>Database </td>
+      <td>Perform the row update and unlock </td>
+    </tr>
+    <tr>
+      <td>Update the &ldquo;recent bookings&rdquo; cache and release the semaphore </td>
+      <td>In-memory resource </td>
+      <td>Edit and unlock an in-memory resource </td>
+    </tr>
+    <tr>
+      <td>Do nothing: the reminder notifications were already scheduled </td>
+      <td>Actor cluster </td>
+      <td>nop </td>
+    </tr>
+    <tr>
+      <td>Do nothing: the bookings log was already updated </td>
+      <td>File </td>
+      <td>nop </td>
+    </tr>
+  </tbody>
+</table><div class="callout note "><div class="callout-title">Commit consistency</div>
 <p>It&rsquo;s up to the implementer to decide the level of consistency in the execution of the commit. Transaction failure is also valid and can be signaled by raising an exception in the target effect. Failure will lead to inconsistency in the overall system state, which can be an acceptable compromise in some use cases.</p>
 <p>For instance, in our imaginary example, the &ldquo;in-memory cache&rdquo; could be locked only briefly to preserve throughput. Because it&rsquo;s optional to the journey process, updating it could be skipped in case of delays. On the other hand, if the &ldquo;internal database&rdquo; update still fails despite the lock, the commit expression could signal this by raising an exception. The exception would conclude the transaction in a failed state, allowing surfacing in the UI for manual remediation.</p></div>
 <h2><a href="#abort" name="abort" class="anchor"><span class="anchor-link"></span></a>Abort</h2>
@@ -315,13 +346,13 @@ endless4s/endless-transaction
 </ul></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless-transaction/tree/v0.2.0/documentation/src/main/paradox/2pc.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless-transaction/tree/v0.3.0/documentation/src/main/paradox/2pc.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.2.0
+0.3.0
 </span>
 </div>
 </article>

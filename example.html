@@ -169,7 +169,7 @@ endless4s/endless-transaction
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.2.0
+<i class="md-icon" title="Version">label_outline</i> 0.3.0
 </label>
 </li>
 </ul>
@@ -238,7 +238,7 @@ endless4s/endless-transaction
 <p>Transfers are implemented using an <code>endless-transaction</code> transaction coordinator. </p>
 <h3><a href="#coordinator" name="coordinator" class="anchor"><span class="anchor-link"></span></a>Coordinator</h3>
 <p>A coordinator is created with <code>TransferID</code> as the transaction identifier type, <code>AccountID</code> as the branch identifier, <code>Transfer</code> as the query payload (the amount, origin, and destination), and <code>TransferFailure</code> as the error coproduct.</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless-transaction/tree/v0.2.0/example/src/main/scala/endless/transaction/example/logic/ShardedAccounts.scala#L64-L71" target="_blank" title="Go to snippet source">source</a><code class="language-scala">transactor.coordinator[TransferID, AccountID, Transfer, TransferFailure](
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless-transaction/tree/v0.3.0/example/src/main/scala/endless/transaction/example/logic/ShardedAccounts.scala#L65-L72" target="_blank" title="Go to snippet source">source</a><code class="language-scala">transactor.coordinator[TransferID, AccountID, Transfer, TransferFailure](
   &quot;transfer&quot;,
   { accountID =&gt;
     val account = sharding.entityFor(accountID)
@@ -249,9 +249,10 @@ endless4s/endless-transaction
 <p>The coordinator is used in the implementation of the <code>transfer</code> method in <code>ShardedAccounts</code>, i.e. the implementation of <code>Accounts</code>. </p>
 <h3><a href="#transaction" name="transaction" class="anchor"><span class="anchor-link"></span></a>Transaction</h3>
 <p>The snippet below shows the logic: the code creates a transfer with two branches, one for the origin account, and the other for the destination account.</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless-transaction/tree/v0.2.0/example/src/main/scala/endless/transaction/example/logic/ShardedAccounts.scala#L29-L49" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def transfer(from: AccountID, to: AccountID, amount: PosAmount): F[TransferFailure \/ Unit] =
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless-transaction/tree/v0.3.0/example/src/main/scala/endless/transaction/example/logic/ShardedAccounts.scala#L29-L50" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def transfer(from: AccountID, to: AccountID, amount: PosAmount): F[TransferFailure \/ Unit] =
   coordinator
     .create(TransferID.random, Transfer(from, to, amount), from, to)
+    .asResource
     .use(_.pollForFinalStatus())
     .flatMap {
       case Status.Committed =&gt; ().asRight[TransferFailure].pure
@@ -274,7 +275,7 @@ endless4s/endless-transaction
 <p>To implement this polling operation, we use the <code>pollForFinalStatus()</code> built-in extension method (defined for <code>Transaction</code>): this method retrieves the status of the transaction at configurable intervals and semantically sleeps in between.</p>
 <h3><a href="#branch" name="branch" class="anchor"><span class="anchor-link"></span></a>Branch</h3>
 <p>An account&rsquo;s involvement in a transfer is described by <code>TransferBranch</code>, as exemplified below with the implementation of the <code>prepare</code> method: </p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless-transaction/tree/v0.2.0/example/src/main/scala/endless/transaction/example/logic/TransferBranch.scala#L21-L66" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class TransferBranch[F[_]: Logger](accountID: AccountID, account: Account[F])(implicit
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless-transaction/tree/v0.3.0/example/src/main/scala/endless/transaction/example/logic/TransferBranch.scala#L21-L66" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class TransferBranch[F[_]: Logger](accountID: AccountID, account: Account[F])(implicit
     retryParameters: TransferParameters.BranchRetryParameters,
     temporal: Temporal[F]
 ) extends Branch[F, TransferID, Transfer, TransferFailure] {
@@ -322,13 +323,13 @@ endless4s/endless-transaction
   }</code></pre>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless-transaction/tree/v0.2.0/documentation/src/main/paradox/example.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless-transaction/tree/v0.3.0/documentation/src/main/paradox/example.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.2.0
+0.3.0
 </span>
 </div>
 </article>
